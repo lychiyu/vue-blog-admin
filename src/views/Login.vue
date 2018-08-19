@@ -43,7 +43,12 @@ export default {
         if (valid) {
           this.logining = true
           let loginParams = { username: this.ruleLogin.account, password: this.ruleLogin.checkPass }
-          sessionStorage.setItem('user', JSON.stringify(loginParams))
+          let user = {
+            name: loginParams.username,
+            avatar: 'https://img.lychiyu.com/favicon.ico'
+          }
+          sessionStorage.setItem('user', JSON.stringify(user))
+          this.$router.replace('/')
         } else {
           console.log('error submit!!')
           return false
