@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from 'views/Login'
 import Home from 'views/Home'
 import PostList from 'views/PostList'
+import TagList from 'views/TagList'
 
 Vue.use(Router)
 
@@ -39,34 +40,28 @@ const router = new Router({
     {
       path: '/',
       component: Home,
-      name: '分类管理',
+      leaf: true,
       iconCls: 'iconfont icon-daohangfenlei', // 图标样式class
       children: [
-        {path: '/add_cate', component: PostList, name: '添加分类'},
-        {path: '/edit_cate/:id', component: PostList, hidden: true},
-        {path: '/cates', component: PostList, name: '分类列表'}
+        {path: '/cates', component: PostList, name: '分类管理'}
       ]
     },
     {
       path: '/',
       component: Home,
-      name: '标签管理',
+      leaf: true,
       iconCls: 'iconfont icon-tag', // 图标样式class
       children: [
-        {path: '/add_tag', component: PostList, name: '添加标签'},
-        {path: '/edit_tag/:id', component: PostList, hidden: true},
-        {path: '/tags', component: PostList, name: '标签列表'}
+        {path: '/tags', component: TagList, name: '标签管理'}
       ]
     },
     {
       path: '/',
       component: Home,
-      name: '图片管理',
+      leaf: true,
       iconCls: 'iconfont icon-image', // 图标样式class
       children: [
-        {path: '/upload', component: PostList, name: '上传图片'},
-        {path: '/edit_image/:id', component: PostList, hidden: true},
-        {path: '/images', component: PostList, name: '图片列表'}
+        {path: '/images', component: PostList, name: '图片管理'}
       ]
     }
   ]
