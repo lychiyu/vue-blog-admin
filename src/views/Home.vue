@@ -213,10 +213,10 @@ export default {
           .el-menu
             height 100%
             background $bgColor
+            .iconfont
+              padding-right 8px
             .el-submenu__title
               color #ffffff
-              .iconfont
-                padding-right 8px
               &:hover
                 background $hoverBgColor
             .el-menu-item

@@ -1,7 +1,5 @@
 <template>
-    <div class="post-list">
-      postlist
-    </div>
+    <div>POSTLIST</div>
 </template>
 
 <script>
@@ -10,5 +8,6 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style scoped>
+
 </style>
