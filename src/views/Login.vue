@@ -10,21 +10,24 @@
       </el-form-item>
       <el-checkbox v-model="checked" checked class="remember">Remember password</el-checkbox>
       <el-form-item style="width:100%;">
-        <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">Login</el-button>
+        <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogin" :loading="logining">Login</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import {login} from '../api/apis'
+import axios from 'axios'
+
 export default {
   name: 'Login',
   data () {
     return {
       logining: false,
       ruleLogin: {
-        account: 'admin',
-        checkPass: '123456'
+        account: '',
+        checkPass: ''
       },
       rules: {
         account: [
@@ -38,17 +41,32 @@ export default {
     }
   },
   methods: {
-    handleSubmit (ev) {
+    handleLogin () {
       this.$refs.ruleLogin.validate((valid) => {
         if (valid) {
           this.logining = true
           let loginParams = { username: this.ruleLogin.account, password: this.ruleLogin.checkPass }
-          let user = {
-            name: loginParams.username,
-            avatar: 'https://img.lychiyu.com/favicon.ico'
-          }
-          sessionStorage.setItem('user', JSON.stringify(user))
-          this.$router.replace('/')
+          login(loginParams).then(res => {
+            console.log(res)
+            if (res.status !== 200) {
+              this.$message({
+                message: 'login error',
+                type: 'error'
+              })
+            } else {
+              let user = {
+                name: loginParams.username,
+                avatar: 'https://img.lychiyu.com/favicon.ico',
+                token: res.data.token
+              }
+              // userInfo 存储 sessionStorage
+              sessionStorage.setItem('user', JSON.stringify(user))
+              this.$store.dispatch('setInfo')
+              this.$router.replace('/')
+            }
+          }).catch(err => {
+            console.log(err)
+          })
         } else {
           console.log('error submit!!')
           return false

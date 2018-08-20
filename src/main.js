@@ -7,7 +7,11 @@ import ElementUI from 'element-ui'
 import 'styles/reset.css'
 import 'styles/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
+import store from './store/store'
+import './axios/'
+import Axios from 'axios'
 
+Vue.prototype.$http = Axios
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
@@ -15,6 +19,7 @@ Vue.use(ElementUI)
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

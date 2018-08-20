@@ -87,6 +87,8 @@
 </template>
 
 <script>
+import store from "../store/store"
+import * as types from '../store/mutation-types'
 export default {
   data () {
     return {
@@ -124,7 +126,7 @@ export default {
       this.$confirm('确认退出吗?', '提示', {
         // type: 'warning'
       }).then(() => {
-        sessionStorage.removeItem('user')
+        store.commit(types.LOGOUT)
         _this.$router.push('/login')
       }).catch(() => {
 
