@@ -47,7 +47,6 @@ export default {
           this.logining = true
           let loginParams = { username: this.ruleLogin.account, password: this.ruleLogin.checkPass }
           login(loginParams).then(res => {
-            console.log(res)
             if (res.status !== 200) {
               this.$message({
                 message: 'login error',
