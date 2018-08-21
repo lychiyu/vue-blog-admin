@@ -4,6 +4,8 @@ import Login from 'views/Login'
 import Home from 'views/Home'
 import PostList from 'views/PostList'
 import TagList from 'views/TagList'
+import CateList from 'views/CateList'
+import ImgList from 'views/ImgList'
 
 Vue.use(Router)
 
@@ -41,16 +43,16 @@ const router = new Router({
       path: '/',
       component: Home,
       leaf: true,
-      iconCls: 'iconfont icon-daohangfenlei', // 图标样式class
+      iconCls: 'iconfont icon-daohangfenlei',
       children: [
-        {path: '/cates', component: PostList, name: '分类管理'}
+        {path: '/cates', component: CateList, name: '分类管理'}
       ]
     },
     {
       path: '/',
       component: Home,
       leaf: true,
-      iconCls: 'iconfont icon-tag', // 图标样式class
+      iconCls: 'iconfont icon-tag',
       children: [
         {path: '/tags', component: TagList, name: '标签管理'}
       ]
@@ -59,9 +61,9 @@ const router = new Router({
       path: '/',
       component: Home,
       leaf: true,
-      iconCls: 'iconfont icon-image', // 图标样式class
+      iconCls: 'iconfont icon-image',
       children: [
-        {path: '/images', component: PostList, name: '图片管理'}
+        {path: '/images', component: ImgList, name: '图片管理'}
       ]
     }
   ]

@@ -6,8 +6,11 @@ import * as actions from './actions'
 import * as getters from './getters'
 
 Vue.use(Vuex)
-
-const userInfo = {name: '', token: ''}
+let userInfo = {name: '', token: ''}
+let user = JSON.parse(sessionStorage.getItem('user'))
+if (user) {
+  userInfo = {name: user.username, token: user.token}
+}
 
 const state = {
   userInfo
