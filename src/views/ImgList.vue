@@ -22,6 +22,8 @@
       </el-table-column>
       <el-table-column prop="type" label="类别" :formatter="formatImgType" sortable>
       </el-table-column>
+      <el-table-column prop="desc" label="图片描述" sortable>
+      </el-table-column>
       <el-table-column prop="create_time" label="添加时间" :formatter="formatDate" sortable>
       </el-table-column>
       <el-table-column label="操作">
@@ -40,6 +42,9 @@
             <el-option label="文章内容插图" :value="3"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="描述" prop="desc">
+          <el-input v-model="editForm.desc" auto-complete="off"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -55,6 +60,9 @@
             <el-option label="文章列表小图" :value="2"></el-option>
             <el-option label="文章内容插图" :value="3"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="描述" prop="desc">
+          <el-input v-model="uploadForm.desc" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="图片" prop="file">
           <el-upload
@@ -105,7 +113,8 @@ export default {
       // 编辑界面数据
       editForm: {
         id: 0,
-        type: ''
+        type: '',
+        desc: ''
       },
       uploadFormVisible: false, // 新增界面是否显示
       uploadLoading: false,
@@ -117,7 +126,8 @@ export default {
       // 新增界面数据
       uploadForm: {
         type: 3,
-        file: ''
+        file: '',
+        desc: ''
       }
     }
   },
@@ -166,7 +176,8 @@ export default {
       this.uploadFormVisible = true
       this.uploadForm = {
         type: 3,
-        file: ''
+        file: '',
+        desc: ''
       }
     },
     beforeUpload (file) {
@@ -174,6 +185,7 @@ export default {
       let fd = new FormData()
       fd.append('file', file)
       fd.append('type', this.uploadForm.type)
+      fd.append('desc', this.uploadForm.desc)
       upload(fd).then(res => {
         let url = res.data.url
         this.$prompt('图片url', '上传成功', {

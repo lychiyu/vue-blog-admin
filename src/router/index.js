@@ -2,10 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from 'views/Login'
 import Home from 'views/Home'
-import PostList from 'views/PostList'
 import TagList from 'views/TagList'
 import CateList from 'views/CateList'
 import ImgList from 'views/ImgList'
+import PostEdit from 'views/post/PostEdit'
+import PostList from 'views/post/PostList'
 
 Vue.use(Router)
 
@@ -34,8 +35,8 @@ const router = new Router({
       name: '文章管理',
       iconCls: 'iconfont icon-book', // 图标样式class
       children: [
-        {path: '/add_post', component: PostList, name: '添加文章'},
-        {path: '/edit_post/:id', component: PostList, hidden: true},
+        {path: '/add_post', component: PostEdit, name: '添加文章'},
+        {path: '/edit_post/:id', component: PostEdit, name: '修改文章', hidden: true},
         {path: '/post', component: PostList, name: '文章列表'}
       ]
     },

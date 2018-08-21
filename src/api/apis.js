@@ -37,3 +37,12 @@ export const imgList = params => { return axios.get(`${host}/img/`, params) }
 
 // 更新图片
 export const editImg = (imgId, params) => { return axios.put(`${host}/img/` + imgId + '/', params) }
+
+// 添加文章
+export const article = params => { return axios.post(`${host}/article/`, params) }
+
+// 文章详情
+export const articleDetail = id => { return axios.get(`${host}/article/` + id + '/') }
+
+// 文章列表
+export const articleList = params => { return axios.get(`${host}/article/`, params) }
