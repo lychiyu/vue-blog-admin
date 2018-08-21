@@ -10,12 +10,12 @@
     </el-col>
 
     <!--列表-->
-    <el-table :data="tags" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+    <el-table :data="cates" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
       <el-table-column type="selection">
       </el-table-column>
       <el-table-column type="index">
       </el-table-column>
-      <el-table-column prop="name" label="标签名">
+      <el-table-column prop="name" label="类别名">
       </el-table-column>
       <el-table-column prop="states" label="状态" :formatter="formatStates" sortable>
       </el-table-column>
@@ -31,7 +31,7 @@
     <!--编辑界面-->
     <el-dialog title="编辑" :visible="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="标签名" prop="name">
+        <el-form-item label="类别名" prop="name">
           <el-input v-model="editForm.name" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -43,7 +43,7 @@
     <!--新增界面-->
     <el-dialog title="新增" :visible="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="标签名" prop="name">
+        <el-form-item label="类别名" prop="name">
           <el-input v-model="addForm.name" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import {tag, delTag, editTag, addTag} from '../api/apis'
+import {cate, delCate, editCate, addCate} from '../api/apis'
 import {formatDate, formatStates} from "../utils"
 
 export default {
@@ -66,7 +66,7 @@ export default {
       filters: {
         name: ''
       },
-      tags: [],
+      cates: [],
       total: 0,
       page: 1,
       listLoading: false,
@@ -75,7 +75,7 @@ export default {
       editLoading: false,
       editFormRules: {
         name: [
-          { required: true, message: '请输入标签名', trigger: 'blur' }
+          { required: true, message: '请输入类别名', trigger: 'blur' }
         ]
       },
       // 编辑界面数据
@@ -87,7 +87,7 @@ export default {
       addLoading: false,
       addFormRules: {
         name: [
-          { required: true, message: '请输入标签名', trigger: 'blur' }
+          { required: true, message: '请输入类别名', trigger: 'blur' }
         ]
       },
       // 新增界面数据
@@ -108,9 +108,9 @@ export default {
     formatStates (row, column, cellValue, index) {
       return formatStates(cellValue)
     },
-    getTags () {
-      tag().then(res => {
-        this.tags = res.data.results
+    getCates () {
+      cate().then(res => {
+        this.cates = res.data.results
       }).catch(err => {
         console.log(err)
       })
@@ -121,14 +121,14 @@ export default {
         type: 'warning'
       }).then(() => {
         this.listLoading = true
-        let tagId = row.id
-        delTag(tagId).then((res) => {
+        let cateId = row.id
+        delCate(cateId).then((res) => {
           this.listLoading = false
           this.$message({
             message: this.opDesc + '成功',
             type: 'success'
           })
-          this.getTags()
+          this.getCates()
         })
       }).catch(err => {
         console.log(err)
@@ -144,7 +144,7 @@ export default {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true
             let params = Object.assign({}, this.editForm)
-            editTag(params.id, {name: params.name}).then((res) => {
+            editCate(params.id, {name: params.name}).then((res) => {
               this.editLoading = false
               this.$message({
                 message: '提交成功',
@@ -152,7 +152,7 @@ export default {
               })
               this.$refs['editForm'].resetFields()
               this.editFormVisible = false
-              this.getTags()
+              this.getCates()
             }).catch(err => {
               console.log(err)
             })
@@ -172,7 +172,7 @@ export default {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.addLoading = true
             let params = Object.assign({}, this.addForm)
-            addTag({name: params.name}).then((res) => {
+            addCate({name: params.name}).then((res) => {
               this.addLoading = false
               this.$message({
                 message: '提交成功',
@@ -180,7 +180,7 @@ export default {
               })
               this.$refs['addForm'].resetFields()
               this.addFormVisible = false
-              this.getTags()
+              this.getCates()
             }).catch(err => {
               console.log(err)
             })
@@ -190,7 +190,7 @@ export default {
     }
   },
   mounted () {
-    this.getTags()
+    this.getCates()
   }
 }
 

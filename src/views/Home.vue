@@ -87,8 +87,8 @@
 </template>
 
 <script>
-import store from "../store/store"
-import * as types from '../store/mutation-types'
+import store from "store/store"
+import * as types from 'store/mutation-types'
 export default {
   data () {
     return {
