@@ -28,6 +28,18 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--分页-->
+    <div v-if="this.cates.length" align="center" style="margin-top: 20px">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="page"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="limit"
+        layout="total, sizes, prev, pager, next"
+        :total="total">
+      </el-pagination>
+    </div>
     <!--编辑界面-->
     <el-dialog title="编辑" :visible="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
@@ -67,8 +79,6 @@ export default {
         name: ''
       },
       cates: [],
-      total: 0,
-      page: 1,
       listLoading: false,
       sels: [], // 列表选中列
       editFormVisible: false, // 编辑界面是否显示
@@ -93,12 +103,18 @@ export default {
       // 新增界面数据
       addForm: {
         name: ''
-      }
+      },
+      limit: 10,
+      page: 1,
+      queryParams: {}
     }
   },
   computed: {
-    opDesc: function () {
+    opDesc () {
       return this.currStates === 1 ? '删除' : '恢复'
+    },
+    total () {
+      return this.cates.length
     }
   },
   methods: {
@@ -109,7 +125,7 @@ export default {
       return formatStates(cellValue)
     },
     getCates () {
-      cate().then(res => {
+      cate({params: this.queryParams}).then(res => {
         this.cates = res.data.results
       }).catch(err => {
         console.log(err)
@@ -187,6 +203,20 @@ export default {
           })
         }
       })
+    },
+    // 每页显示数据量变更
+    handleSizeChange (val) {
+      this.limit = val
+      this.queryParams.limit = this.limit
+      this.queryParams.page = this.page
+      this.getCates()
+    },
+    // 页码变更
+    handleCurrentChange (val) {
+      this.page = val
+      this.queryParams.limit = this.limit
+      this.queryParams.page = this.page
+      this.getCates()
     }
   },
   mounted () {

@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import {imgList, tag, cate, upload, article, articleDetail} from '../../api/apis'
+import {imgList, tag, cate, upload, article, articleDetail, articleUpdate} from '../../api/apis'
 
 export default {
   name: 'PostEdit',
@@ -138,6 +138,25 @@ export default {
       })
     },
     pubSubmit () {
+      this.$confirm('即将发布该文章, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.confirmSubmit()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消发布'
+        })
+      })
+    },
+    confirmSubmit () {
+      let id = this.$route.params.id
+      console.log(id)
+      if (id !== undefined) {
+        console.log(id)
+      }
       let params = {
         title: this.post.title,
         summary: this.post.summary,
@@ -148,22 +167,43 @@ export default {
         is_about: this.post.isAbout,
         md_content: this.post.mdContent
       }
-      article(params).then(res => {
-        if (res.status !== 201) {
-          this.$message({
-            message: 'publish fail',
-            type: 'error'
-          })
-        } else {
-          this.$message({
-            message: 'publish success',
-            type: 'success'
-          })
-          this.$router.replace('/post')
-        }
-      }).catch(err => {
-        console.log(err)
-      })
+      if (id !== undefined) {
+        params.big_img = this.post.currBig.id
+        params.small_img = this.post.currSmall.id
+        articleUpdate(id, params).then(res => {
+          if (res.status !== 200) {
+            this.$message({
+              message: '修改文章失败',
+              type: 'error'
+            })
+          } else {
+            this.$message({
+              message: '修改文章成功',
+              type: 'success'
+            })
+            this.$router.replace('/post')
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        article(params).then(res => {
+          if (res.status !== 201) {
+            this.$message({
+              message: '发布文章失败',
+              type: 'error'
+            })
+          } else {
+            this.$message({
+              message: '发布文章成功',
+              type: 'success'
+            })
+            this.$router.replace('/post')
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     },
     isEdit () {
       let id = this.$route.params.id

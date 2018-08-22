@@ -32,6 +32,18 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--分页-->
+    <div v-if="this.imgs.length" align="center" style="margin-top: 20px">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="page"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="limit"
+        layout="total, sizes, prev, pager, next"
+        :total="total">
+      </el-pagination>
+    </div>
     <!--编辑界面-->
     <el-dialog title="编辑" :visible="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
@@ -99,8 +111,6 @@ export default {
         name: ''
       },
       imgs: [],
-      total: 0,
-      page: 1,
       listLoading: false,
       sels: [], // 列表选中列
       editFormVisible: false, // 编辑界面是否显示
@@ -128,7 +138,15 @@ export default {
         type: 3,
         file: '',
         desc: ''
-      }
+      },
+      queryParams: {},
+      page: 1,
+      limit: 10
+    }
+  },
+  computed: {
+    total () {
+      return this.imgs.length
     }
   },
   methods: {
@@ -139,7 +157,7 @@ export default {
       return formatImgType(cellValue)
     },
     getImgs () {
-      imgList().then(res => {
+      imgList({params: this.queryParams}).then(res => {
         this.imgs = res.data.results
         // this.
       }).catch(err => {
@@ -201,6 +219,20 @@ export default {
     },
     uploadSubmit () {
       this.$refs.uploadElm.submit()
+    },
+    // 每页显示数据量变更
+    handleSizeChange (val) {
+      this.limit = val
+      this.queryParams.limit = this.limit
+      this.queryParams.page = this.page
+      this.getImgs()
+    },
+    // 页码变更
+    handleCurrentChange (val) {
+      this.page = val
+      this.queryParams.limit = this.limit
+      this.queryParams.page = this.page
+      this.getImgs()
     }
   },
   mounted () {
