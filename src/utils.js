@@ -1,7 +1,6 @@
 import moment from "moment/moment"
 
 export const formatDate = (date, formatStr = 'YYYY-MM-DD HH:mm:ss') => {
-  // return this.$moment(date).format(formatStr)
   return moment(date).format(formatStr)
 }
 

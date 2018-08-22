@@ -14,9 +14,9 @@
       </el-table-column>
       <el-table-column type="index">
       </el-table-column>
-      <el-table-column prop="title" label="标题" :formatter="formatImgType" sortable>
+      <el-table-column prop="title" label="标题" sortable>
       </el-table-column>
-      <el-table-column prop="title" label="摘要" :formatter="formatImgType" sortable>
+      <el-table-column prop="summary" label="摘要" sortable>
       </el-table-column>
       <el-table-column prop="big_pic" label="大图">
         <template slot-scope="scope">
@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column prop="create_time" label="添加时间" :formatter="formatDate" sortable>
       </el-table-column>
-      <el-table-column prop="create_time" label="修改时间" :formatter="formatDate" sortable>
+      <el-table-column prop="update_time" label="修改时间" :formatter="formatDate" sortable>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="200">
         <template scope="scope">
@@ -48,6 +48,17 @@
         </template>
       </el-table-column>
     </el-table>
+    <div v-if="this.posts.length" align="center" style="margin-top: 20px">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="page"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="limit"
+        layout="total, sizes, prev, pager, next"
+        :total="total">
+      </el-pagination>
+    </div>
   </section>
 </template>
 
@@ -62,10 +73,16 @@ export default {
         name: ''
       },
       posts: [],
-      total: 0,
-      page: 1,
       listLoading: false,
-      sels: [] // 列表选中列
+      sels: [], // 列表选中列
+      queryParams: {},
+      page: 1,
+      limit: 10
+    }
+  },
+  computed: {
+    total () {
+      return this.posts.length
     }
   },
   methods: {
@@ -76,7 +93,7 @@ export default {
       return formatImgType(cellValue)
     },
     getPosts () {
-      articleList().then(res => {
+      articleList({params: this.queryParams}).then(res => {
         this.posts = res.data.results
       }).catch(err => {
         console.log(err)
@@ -89,6 +106,22 @@ export default {
       } else {
         this.$router.push({path: `/edit_post/${id}`})
       }
+    },
+    // 每页显示数据量变更
+    handleSizeChange (val) {
+      this.limit = val
+      this.queryParams.limit = this.limit
+      this.queryParams.page = this.page
+      console.log(this.queryParams)
+      this.getPosts()
+    },
+    // 页码变更
+    handleCurrentChange (val) {
+      this.page = val
+      this.queryParams.limit = this.limit
+      this.queryParams.page = this.page
+      console.log(this.queryParams)
+      this.getPosts(this.currentPage, this.pageSize)
     }
   },
   mounted () {
