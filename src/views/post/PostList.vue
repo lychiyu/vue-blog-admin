@@ -39,11 +39,11 @@
       </el-table-column>
       <el-table-column prop="create_time" label="添加时间" :formatter="formatDate" sortable>
       </el-table-column>
-      <el-table-column prop="create_time" label="更新时间" :formatter="formatDate" sortable>
+      <el-table-column prop="create_time" label="修改时间" :formatter="formatDate" sortable>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="200">
         <template scope="scope">
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
           <el-button size="small" type="danger" @click="handleOp(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -81,6 +81,14 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    // 跳转到编辑文章页面
+    handleEdit (id) {
+      if (id === undefined) {
+        this.$router.push({path: `/add_post`})
+      } else {
+        this.$router.push({path: `/edit_post/${id}`})
+      }
     }
   },
   mounted () {

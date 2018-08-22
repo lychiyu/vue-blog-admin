@@ -3,13 +3,13 @@
       <el-col :span="24" class="toolbar" style="padding-bottom: 0px; padding-top: 20px">
         <el-form :inline="true" :model="filters">
           <el-form-item label="文章标题:">
-            <el-input v-model="title" size="medium" placeholder="请输入文章标题" style="width: 220px"></el-input>
+            <el-input v-model="post.title" size="medium" placeholder="请输入文章标题" style="width: 220px"></el-input>
           </el-form-item>
           <el-form-item label="文章摘要:" size="large">
-            <el-input  style="width: 220px" type="textarea" v-model="summary" placeholder="请输入文章摘要"></el-input>
+            <el-input  style="width: 220px" type="textarea" v-model="post.summary" placeholder="请输入文章摘要"></el-input>
           </el-form-item>
           <el-form-item label="文章大图:">
-            <el-select size="medium" v-model="currBig" placeholder="大图">
+            <el-select size="medium" v-model="post.currBig" placeholder="大图">
               <el-option v-for="item in bigImgs"
                 :key="item.id"
                 :label="item.desc"
@@ -19,7 +19,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="文章小图:">
-            <el-select style="width: 100px;" v-model="currSmall" placeholder="小图">
+            <el-select style="width: 100px;" v-model="post.currSmall" placeholder="小图">
               <el-option v-for="item in smallImgs"
                 :key="item.id"
                 :label="item.desc"
@@ -31,7 +31,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="类别:">
-            <el-select v-model="currCate" placeholder="选择文章类别">
+            <el-select v-model="post.currCate" placeholder="选择文章类别">
               <el-option v-for="item in cates"
                          :key="item.id"
                          :label="item.name"
@@ -40,7 +40,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="标签:">
-            <el-select v-model="currTags" multiple placeholder="选择文章标签">
+            <el-select v-model="post.currTags" multiple placeholder="选择文章标签">
               <el-option
                 v-for="item in tags"
                 :key="item.id"
@@ -51,7 +51,7 @@
           </el-form-item>
           <el-form-item style="margin-left: 100px" label="About?">
             <el-switch
-              v-model="isAbout"
+              v-model="post.isAbout"
               active-text="Yes"
               inactive-text="No">
             </el-switch>
@@ -61,7 +61,7 @@
           </el-form-item>
           <el-form-item class="editor" style="width: 100%">
             <mavon-editor ref=md @imgAdd="mdImgAdd"
-             style="width: 100%; min-height: 500px;" v-model="mdContent"/>
+             style="width: 100%; min-height: 500px;" v-model="post.mdContent"/>
           </el-form-item>
         </el-form>
       </el-col>
@@ -75,18 +75,20 @@ export default {
   name: 'PostEdit',
   data () {
     return {
-      title: '',
-      summary: '',
       bigImgs: [],
       smallImgs: [],
       cates: [],
       tags: [],
-      currBig: '',
-      currSmall: '',
-      currCate: '',
-      currTags: [],
-      isAbout: false,
-      mdContent: ''
+      post: {
+        title: '',
+        summary: '',
+        currBig: '',
+        currSmall: '',
+        currCate: '',
+        currTags: [],
+        isAbout: false,
+        mdContent: ''
+      }
     }
   },
   methods: {
@@ -137,14 +139,14 @@ export default {
     },
     pubSubmit () {
       let params = {
-        title: this.title,
-        summary: this.summary,
-        big_img: this.currBig,
-        small_img: this.currSmall,
-        cate: this.currCate,
-        tags: this.currTags,
-        is_about: this.isAbout,
-        md_content: this.mdContent
+        title: this.post.title,
+        summary: this.post.summary,
+        big_img: this.post.currBig,
+        small_img: this.post.currSmall,
+        cate: this.post.currCate,
+        tags: this.post.currTags,
+        is_about: this.post.isAbout,
+        md_content: this.post.mdContent
       }
       article(params).then(res => {
         if (res.status !== 201) {
@@ -164,23 +166,25 @@ export default {
       })
     },
     isEdit () {
-      this.postDetail = {}
       let id = this.$route.params.id
+      console.log(id)
       if (id !== undefined) {
-        articleDetail({params: {id: id}}).then(res => {
-          if (res.code !== 0) {
+        articleDetail(id).then(res => {
+          if (res.status !== 200) {
             this.$message({
               message: 'get post detail fail',
               type: 'error'
             })
           } else {
-            this.title = res.data.title
-            this.logo = res.data.logo
-            this.abstract = res.data.abstract
-            this.cate_id = res.data.cate_id
-            this.md_content = res.data.md_content
+            this.post.title = res.data.title
+            this.post.summary = res.data.summary
+            this.post.currBig = res.data.big_img
+            this.post.currSmall = res.data.small_img
+            this.post.currCate = res.data.cate.id
+            this.post.isAbout = res.data.is_about
+            this.post.mdContent = res.data.md_content
             for (let i = 0; i < res.data.tags.length; i++) {
-              this.tags.push(res.data.tags[i].tag_id)
+              this.post.currTags.push(res.data.tags[i].id)
             }
           }
         }).catch(err => {
