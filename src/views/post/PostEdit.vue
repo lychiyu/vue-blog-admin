@@ -60,7 +60,7 @@
             <el-button type="success" @click="pubSubmit">立即发布</el-button>
           </el-form-item>
           <el-form-item class="editor" style="width: 100%">
-            <mavon-editor ref=md @imgAdd="mdImgAdd"
+            <mavon-editor @change="mdChange" ref=md @imgAdd="mdImgAdd"
              style="width: 100%; min-height: 500px;" v-model="post.mdContent"/>
           </el-form-item>
         </el-form>
@@ -87,7 +87,8 @@ export default {
         currCate: '',
         currTags: [],
         isAbout: false,
-        mdContent: ''
+        mdContent: '',
+        htmlContent: ''
       }
     }
   },
@@ -137,6 +138,9 @@ export default {
         console.log(err)
       })
     },
+    mdChange (value, render) {
+      this.post.htmlContent = render
+    },
     pubSubmit () {
       this.$confirm('即将发布该文章, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -165,7 +169,8 @@ export default {
         cate: this.post.currCate,
         tags: this.post.currTags,
         is_about: this.post.isAbout,
-        md_content: this.post.mdContent
+        md_content: this.post.mdContent,
+        html_content: this.post.htmlContent
       }
       if (id !== undefined) {
         params.big_img = this.post.currBig.id
@@ -207,7 +212,6 @@ export default {
     },
     isEdit () {
       let id = this.$route.params.id
-      console.log(id)
       if (id !== undefined) {
         articleDetail(id).then(res => {
           if (res.status !== 200) {
@@ -223,6 +227,7 @@ export default {
             this.post.currCate = res.data.cate.id
             this.post.isAbout = res.data.is_about
             this.post.mdContent = res.data.md_content
+            this.post.htmlContent = res.data.html_content
             for (let i = 0; i < res.data.tags.length; i++) {
               this.post.currTags.push(res.data.tags[i].id)
             }
