@@ -21,17 +21,6 @@ const router = new Router({
     {
       path: '/',
       component: Home,
-      name: '用户管理',
-      iconCls: 'iconfont icon-user', // 图标样式class
-      children: [
-        {path: '/add_user', component: PostList, name: '添加用户'},
-        {path: '/edit_user/:id', component: PostList, hidden: true},
-        {path: '/users', component: PostList, name: '用户列表'}
-      ]
-    },
-    {
-      path: '/',
-      component: Home,
       name: '文章管理',
       iconCls: 'iconfont icon-book', // 图标样式class
       children: [
@@ -65,6 +54,17 @@ const router = new Router({
       iconCls: 'iconfont icon-image',
       children: [
         {path: '/images', component: ImgList, name: '图片管理'}
+      ]
+    },
+    {
+      path: '/',
+      component: Home,
+      name: '用户管理',
+      iconCls: 'iconfont icon-user', // 图标样式class
+      children: [
+        {path: '/add_user', component: PostList, name: '添加用户'},
+        {path: '/edit_user/:id', component: PostList, hidden: true},
+        {path: '/users', component: PostList, name: '用户列表'}
       ]
     }
   ]
