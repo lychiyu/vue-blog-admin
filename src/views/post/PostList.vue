@@ -1,15 +1,7 @@
 <template>
   <section class="post-list">
-    <!--工具条-->
-    <el-col :span="24" class="toolbar" style="padding-bottom: 0px; padding-top: 20px">
-      <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-button type="primary" @click="handleUpload">上传图片</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col>
     <!--列表-->
-    <el-table :data="posts" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+    <el-table :data="posts" highlight-current-row v-loading="listLoading" style="width: 100%;">
       <el-table-column type="selection">
       </el-table-column>
       <el-table-column type="index">

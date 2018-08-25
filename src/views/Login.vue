@@ -18,7 +18,6 @@
 
 <script>
 import {login} from '../api/apis'
-import axios from 'axios'
 
 export default {
   name: 'Login',
