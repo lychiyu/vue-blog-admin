@@ -9,7 +9,7 @@
       </el-form>
     </el-col>
     <!--列表-->
-    <el-table :data="cates" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+    <el-table :data="cates" highlight-current-row v-loading="listLoading" style="width: 100%;">
       <el-table-column type="selection">
       </el-table-column>
       <el-table-column type="index">
