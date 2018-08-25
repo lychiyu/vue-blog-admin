@@ -1,7 +1,7 @@
 <template>
     <section class="post-edit">
       <el-col :span="24" class="toolbar" style="padding-bottom: 0px; padding-top: 20px">
-        <el-form :inline="true" :model="filters">
+        <el-form :inline="true">
           <el-form-item label="文章标题:">
             <el-input v-model="post.title" size="medium" placeholder="请输入文章标题" style="width: 220px"></el-input>
           </el-form-item>
@@ -173,8 +173,6 @@ export default {
         html_content: this.post.htmlContent
       }
       if (id !== undefined) {
-        params.big_img = this.post.currBig.id
-        params.small_img = this.post.currSmall.id
         articleUpdate(id, params).then(res => {
           if (res.status !== 200) {
             this.$message({
@@ -222,8 +220,8 @@ export default {
           } else {
             this.post.title = res.data.title
             this.post.summary = res.data.summary
-            this.post.currBig = res.data.big_img
-            this.post.currSmall = res.data.small_img
+            this.post.currBig = res.data.big_img.id
+            this.post.currSmall = res.data.small_img.id
             this.post.currCate = res.data.cate.id
             this.post.isAbout = res.data.is_about
             this.post.mdContent = res.data.md_content
