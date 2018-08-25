@@ -105,15 +105,13 @@ export default {
       },
       limit: 10,
       page: 1,
+      total: 0,
       queryParams: {}
     }
   },
   computed: {
     opDesc () {
       return this.currStates === 1 ? '删除' : '恢复'
-    },
-    total () {
-      return this.cates.length
     }
   },
   methods: {
@@ -126,6 +124,7 @@ export default {
     getCates () {
       cate({params: this.queryParams}).then(res => {
         this.cates = res.data.results
+        this.total = res.data.count
       }).catch(err => {
         console.log(err)
       })

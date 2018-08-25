@@ -140,12 +140,8 @@ export default {
       },
       queryParams: {},
       page: 1,
-      limit: 10
-    }
-  },
-  computed: {
-    total () {
-      return this.imgs.length
+      limit: 10,
+      total: 0
     }
   },
   methods: {
@@ -158,7 +154,7 @@ export default {
     getImgs () {
       imgList({params: this.queryParams}).then(res => {
         this.imgs = res.data.results
-        // this.
+        this.total = res.data.count
       }).catch(err => {
         console.log(err)
       })
