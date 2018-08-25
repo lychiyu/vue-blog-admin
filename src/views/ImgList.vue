@@ -101,7 +101,7 @@
 
 <script>
 import {imgList, editImg, upload} from '../api/apis'
-import {formatDate, formatImgType} from "../utils"
+import {formatDate, formatImgType} from '../utils'
 
 export default {
   data () {

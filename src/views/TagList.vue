@@ -24,7 +24,7 @@
       <el-table-column label="操作">
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">{{scope.row.states === 1 ? '删除' : '恢复'}}</el-button>
+          <el-button :type="scope.row.states === 1 ? 'danger' : 'success'" size="small" @click="handleDel(scope.$index, scope.row)">{{scope.row.states === 1 ? '删除' : '恢复'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -69,7 +69,7 @@
 
 <script>
 import {tag, delTag, editTag, addTag} from '../api/apis'
-import {formatDate, formatStates} from "../utils"
+import {formatDate, formatStates} from '../utils'
 
 export default {
   data () {
