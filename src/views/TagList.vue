@@ -106,15 +106,13 @@ export default {
       },
       queryParams: {},
       page: 1,
-      limit: 10
+      limit: 10,
+      total: 0
     }
   },
   computed: {
     opDesc () {
       return this.currStates === 1 ? '删除' : '恢复'
-    },
-    total () {
-      return this.tags.length
     }
   },
   methods: {
@@ -127,6 +125,7 @@ export default {
     getTags () {
       tag({params: this.queryParams}).then(res => {
         this.tags = res.data.results
+        this.total = res.data.count
       }).catch(err => {
         console.log(err)
       })

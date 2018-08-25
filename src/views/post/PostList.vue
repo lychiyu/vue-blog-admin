@@ -77,12 +77,8 @@ export default {
       sels: [], // 列表选中列
       queryParams: {},
       page: 1,
-      limit: 10
-    }
-  },
-  computed: {
-    total () {
-      return this.posts.length
+      limit: 10,
+      total: 0
     }
   },
   methods: {
@@ -95,6 +91,7 @@ export default {
     getPosts () {
       articleList({params: this.queryParams}).then(res => {
         this.posts = res.data.results
+        this.total = res.data.count
       }).catch(err => {
         console.log(err)
       })
