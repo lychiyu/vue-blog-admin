@@ -44,7 +44,7 @@
       <el-table-column label="操作" fixed="right" width="200">
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
-          <el-button size="small" type="danger" @click="handleOp(scope.$index, scope.row)">删除</el-button>
+          <el-button size="small" :type="scope.row.states === 1 ? 'danger' : 'success'" @click="handleOp(scope.row)">{{scope.row.states === 1 ? '删除' : '恢复'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,12 +63,13 @@
 </template>
 
 <script>
-import {articleList} from '../../api/apis'
-import {formatDate, formatImgType} from "../../utils"
+import {articleList, articleDelete} from '../../api/apis'
+import {formatDate, formatImgType} from '../../utils'
 
 export default {
   data () {
     return {
+      currStates: 1,
       filters: {
         name: ''
       },
@@ -79,6 +80,11 @@ export default {
       page: 1,
       limit: 10,
       total: 0
+    }
+  },
+  computed: {
+    opDesc () {
+      return this.currStates === 1 ? '删除' : '恢复'
     }
   },
   methods: {
@@ -103,6 +109,24 @@ export default {
       } else {
         this.$router.push({path: `/edit_post/${id}`})
       }
+    },
+    handleOp (row) {
+      this.currStates = row.states
+      this.$confirm('确认' + this.opDesc + '该文章吗?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.listLoading = true
+        articleDelete(row.id).then((res) => {
+          this.listLoading = false
+          this.getPosts()
+          this.$message({
+            message: this.opDesc + '成功',
+            type: 'success'
+          })
+        })
+      }).catch(err => {
+        console.log(err)
+      })
     },
     // 每页显示数据量变更
     handleSizeChange (val) {

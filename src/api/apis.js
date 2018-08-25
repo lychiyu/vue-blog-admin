@@ -49,3 +49,6 @@ export const articleList = params => { return axios.get(`${host}/article/`, para
 
 // 修改文章
 export const articleUpdate = (id, params) => { return axios.put(`${host}/article/` + id + '/', params) }
+
+// 修改文章
+export const articleDelete = id => { return axios.delete(`${host}/article/` + id + '/') }
